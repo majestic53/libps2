@@ -1,0 +1,14 @@
+Keyboard Scan-code Grammar
+2015 David Jolly
+
+* MUST KEEP STATE OF SHIFT/CONTROL/CAPS_LOCK KEYS
+
+sequence ::= <code_make> | <code_break> | <code_ext_make> | <code_ext_break>
+
+code_make ::= <byte>
+
+code_break ::= 0xF0 <byte>
+
+code_ext_make ::= 0xE0 <code_make>
+
+code_ext_break ::= 0xE0 <code_break>
