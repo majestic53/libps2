@@ -1,7 +1,7 @@
 LIBPS2
 ======
 
-LIBPS2 is a library for interfacing AVR microcontrollers with a PS/2 keyboard.
+LIBPS2 is a library for interfacing AVR microcontrollers with PS/2 keyboards.
 
 ###Supported Features
 
