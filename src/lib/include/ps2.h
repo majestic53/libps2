@@ -20,11 +20,79 @@
 #ifndef LIBPS2_H_
 #define LIBPS2_H_
 
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
 
-// TODO
+#ifndef __in
+#define __in
+#endif // __in
+#ifndef __out
+#define __out
+#endif // __out
+#ifndef __inout
+#define __inout
+#endif // __inout
+
+#define KEYBUF_CAP_MAX (UINT8_MAX + 1)
+
+#define DEFINE_DDR(_BNK_) DDR ## _BNK_
+#define DEFINE_PIN(_BNK_, _PIN_) P ## _BNK_ ## _PIN_
+#define DEFINE_PORT(_BNK_) PORT ## _BNK_
+
+typedef struct _ps2_comm_t {
+	volatile uint8_t *ddr_clock;
+	volatile uint8_t *ddr_data;
+	uint8_t pin_clock;
+	uint8_t pin_data;
+	volatile uint8_t *port_clock;
+	volatile uint8_t *port_data;
+} ps2_comm_t;
+
+typedef struct _ps2_keybuf_t {
+	uint8_t data[KEYBUF_CAP_MAX];
+	uint8_t capacity;
+	uint8_t count;
+	uint8_t read;
+	uint8_t write;
+} ps2_keybuf_t;
+
+typedef struct _ps2_state_t {
+	uint8_t caps;
+	uint8_t control;
+	uint8_t shift;
+} ps2_state_t;
+
+typedef struct _ps2_t {
+	ps2_keybuf_t buffer;
+	ps2_comm_t comm;
+	ps2_state_t state;
+} ps2_t;
+
+#define ps2_initialize(_CONT_, _CLK_BNK_, _CLK_PIN_, _DAT_BNK_, _DAT_PIN_, _CAP_) \
+	_ps2_initialize(_CONT_, &DEFINE_DDR(_CLK_BNK_), &DEFINE_PORT(_CLK_BNK_), \
+	DEFINE_PIN(_CLK_BNK_, _CLK_PIN_), &DEFINE_DDR(_DAT_BNK_), &DEFINE_PORT(_DAT_BNK_), \
+	DEFINE_PIN(_DAT_BNK_, _DAT_PIN_), _CAP_)
+void _ps2_initialize(
+	__inout ps2_t *context,
+	__in volatile uint8_t *ddr_clock,
+	__in volatile uint8_t *port_clock,
+	__in uint8_t pin_clock,
+	__in volatile uint8_t *ddr_data,
+	__in volatile uint8_t *port_data,
+	__in uint8_t pin_data,
+	__in uint8_t capacity
+	);
+
+void ps2_uninitialize(
+	__inout ps2_t *context
+	);
+
+char ps2_read(
+	__inout ps2_t *context
+	);
 
 #ifdef __cplusplus
 }
