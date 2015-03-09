@@ -17,14 +17,65 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <avr/interrupt.h>
+#include <avr/io.h>
+#include <util/delay.h>
 #include  "../lib/include/ps2.h"
+
+// TODO: Debug
+
+ISR(INT0_vect)
+{
+	// TODO
+}
+
+void 
+int0_initialize(void)
+{
+	TRACE_ENTRY();
+
+	EIMSK |= _BV(INT0);
+	EICRA |= (_BV(ISC01) & ~_BV(ISC00));
+	sei();
+
+	TRACE_EXIT();
+}
+
+void 
+int0_uninitialize(void)
+{
+	TRACE_ENTRY();
+
+	cli();
+	EICRA &= ~_BV(ISC01);
+	EIMSK &= ~_BV(INT0);
+
+	TRACE_EXIT();
+}
+
+// ---
 
 int 
 main(void) 
 {
 	int result = 0;
 
+	TRACE_INITIALIZE();
+	TRACE_ENTRY();
+
 	// TODO
 
+	int0_initialize();
+
+	DDRD &= ~_BV(PD3);
+	PORTD &= ~_BV(PD3);
+
+	while(1) { _delay_ms(1000); }
+
+	int0_uninitialize();
+
+	// ---
+
+	TRACE_EXIT_MESSAGE("Return Value: 0x%08x", result);
 	return result;
 }

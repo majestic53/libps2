@@ -36,6 +36,41 @@ extern "C" {
 #define __inout
 #endif // __inout
 
+#define NDEBUG
+#ifndef NDEBUG
+#define _CAT_STR(_STR_) # _STR_
+#define CAT_STR(_STR_) _CAT_STR(_STR_)
+#define _TRACE_MESSAGE(_PRE_, _FORM_, ...) \
+	trace_message(__FILE__, CAT_STR(__LINE__), __func__, _PRE_, _FORM_, __VA_ARGS__)
+#define TRACE_ENTRY() _TRACE_MESSAGE("+", "", "")
+#define TRACE_ENTRY_MESSAGE(_FORM_, ...) _TRACE_MESSAGE("+", _FORM_, __VA_ARGS__)
+#define TRACE_EVENT(_EVT_) _TRACE_MESSAGE("", _EVT_, "")
+#define TRACE_EVENT_MESSAGE(_FORM_, ...) _TRACE_MESSAGE("", _FORM_, __VA_ARGS__)
+#define TRACE_EXIT() _TRACE_MESSAGE("-", "", "")
+#define TRACE_EXIT_MESSAGE(_FORM_, ...) _TRACE_MESSAGE("-", _FORM_, __VA_ARGS__)
+#define TRACE_INITIALIZE() trace_initialize()
+
+void trace_initialize(void);
+
+void trace_message(
+	__in const char *file,
+	__in const char *line,
+	__in const char *funct,
+	__in const char *prefix,
+	__in const char *format,
+	...
+	);
+
+#else
+#define TRACE_ENTRY()
+#define TRACE_ENTRY_MESSAGE(_FORM_, ...)
+#define TRACE_EVENT(_EVT_)
+#define TRACE_EVENT_MESSAGE(_FORM_, ...)
+#define TRACE_EXIT()
+#define TRACE_EXIT_MESSAGE(_FORM_, ...)
+#define TRACE_INITIALIZE()
+#endif // NDEBUG
+
 #define KEYBUF_CAP_MAX (UINT8_MAX + 1)
 
 #define DEFINE_DDR(_BNK_) DDR ## _BNK_

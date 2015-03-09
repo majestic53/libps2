@@ -27,6 +27,11 @@ Changelog
 =========
 
 ###Version 0.1.1510
+*Updated: 3/8/2015*
+
+* Added UART tracing
+* Added key buffer
+
 *Updated: 3/7/2015*
 
 * Repo creation
