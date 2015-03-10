@@ -139,6 +139,42 @@ trace_message(
 #define CODE_BREAK 0xf0
 #define CODE_EXTEND 0xe0
 
+typedef enum _ps2_rdstate_t {
+        READ_STATE_START = 0,
+        READ_STATE_DATA_0,
+        READ_STATE_DATA_1,
+        READ_STATE_DATA_2,
+        READ_STATE_DATA_3,
+        READ_STATE_DATA_4,
+        READ_STATE_DATA_5,
+        READ_STATE_DATA_6,
+        READ_STATE_DATA_7,
+        READ_STATE_PARITY,
+        READ_STATE_STOP,
+} ps2_rdstate_t;
+
+typedef struct __attribute__((__packed__)) _ps2_rddata_t {
+        uint8_t b0: 1;
+        uint8_t b1: 1;
+        uint8_t b2: 1;
+        uint8_t b3: 1;
+        uint8_t b4: 1;
+        uint8_t b5: 1;
+        uint8_t b6: 1;
+        uint8_t b7: 1;
+} ps2_rddata_t;
+
+typedef struct _ps2_rdcont_t {
+        union {
+                ps2_rddata_t bit;
+                uint8_t byte;
+        } data;
+        uint8_t parity;
+        ps2_rdstate_t state;
+} ps2_rdcont_t;
+
+static volatile ps2_rdcont_t rdcont;
+
 void 
 ps2_keybuf_initialize(
 	__inout ps2_keybuf_t *context,

@@ -36,7 +36,7 @@ extern "C" {
 #define __inout
 #endif // __inout
 
-#define NDEBUG
+//#define NDEBUG
 #ifndef NDEBUG
 #define _CAT_STR(_STR_) # _STR_
 #define CAT_STR(_STR_) _CAT_STR(_STR_)

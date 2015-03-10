@@ -26,6 +26,11 @@ Table of Contents
 Changelog
 =========
 
+###Version 0.1.1511
+*Updated: 3/9/2015*
+
+* Added global read character context
+
 ###Version 0.1.1510
 *Updated: 3/8/2015*
 

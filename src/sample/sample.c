@@ -23,10 +23,14 @@
 #include  "../lib/include/ps2.h"
 
 // TODO: Debug
+static volatile uint32_t count = 0;
+// ---
 
 ISR(INT0_vect)
 {
 	// TODO
+	++count;
+	// ---
 }
 
 void 
@@ -70,7 +74,10 @@ main(void)
 	DDRD &= ~_BV(PD3);
 	PORTD &= ~_BV(PD3);
 
-	while(1) { _delay_ms(1000); }
+	while(1) {
+		_delay_ms(1000);
+		TRACE_EVENT_MESSAGE("%lu", count);
+	}
 
 	int0_uninitialize();
 
